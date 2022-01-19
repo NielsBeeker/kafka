@@ -3,12 +3,12 @@ package kafka.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class groupConsumer {
+public class ConsumerGroup {
     private ArrayList<Consumer> consumers;
     private HashMap<Integer, Integer> offsetPartition; // hash (partitionsid, offset)
     final private String channel;
 
-    public groupConsumer(final String subject) {
+    public ConsumerGroup(final String subject) {
         this.channel = subject;
         this.consumers = new ArrayList<>();
         this.offsetPartition = new HashMap<>();

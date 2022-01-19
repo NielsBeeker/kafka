@@ -17,6 +17,10 @@ public class EventBus {
         var newTopic = new Topic(lowerSubject, nbPartitionTopic);
         return this.topics.put(lowerSubject, newTopic) != null;
     }
+
+    public HashMap<String, Topic> getTopics() {
+        return topics;
+    }
 }
 // TOPIC
 // a la base, aucun topic, quandn ouveau msg, creation nouveau channel => topic

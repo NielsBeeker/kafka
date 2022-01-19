@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class EventBusService {
     EventBus eventBus;
-    private ArrayList<groupConsumer> groupConsumers;
+    private ArrayList<ConsumerGroup> groupConsumers;
 
     public EventBusService(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -20,11 +20,8 @@ public class EventBusService {
     // publish
 
 
-    public boolean subscribe(Topic topic, groupConsumer groupConsumer) {
-        if (groupConsumer.getTopicId())
-            return false;
-        groupConsumer.setTopicId(topic.topicId);
-        return true;
+    public boolean subscribe(final String channel, ConsumerGroup groupConsumer) {
+
     }
 
 
