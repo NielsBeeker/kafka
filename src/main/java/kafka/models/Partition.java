@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Partition {
     final private Integer partitionId;
+    private Integer eventIndex = 0;
     private ArrayList<Event> events;
 
     public Partition(Integer partitionId) {
@@ -19,5 +20,13 @@ public class Partition {
 
     public Integer getPartitionId() {
         return partitionId;
+    }
+
+    public void setEventIndex(final Integer eventIndex) {
+        this.eventIndex = eventIndex;
+    }
+
+    public boolean addEvent(final Event event) {
+        return this.events.add(event);
     }
 }

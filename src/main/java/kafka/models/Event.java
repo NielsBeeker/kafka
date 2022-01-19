@@ -3,12 +3,12 @@ package kafka.models;
 public class Event {
     final private Integer id;
     final private String body;
-    final private EventType eventType;
+    final private Integer partitionId;
 
-    public Event(Integer id, String body, EventType eventType) {
+    public Event(Integer id, String body, Integer partitionId) {
         this.id = id;
         this.body = body;
-        this.eventType = eventType;
+        this.partitionId = partitionId;
     }
 
     public Integer getId() {
@@ -19,7 +19,7 @@ public class Event {
         return body;
     }
 
-    public EventType getEventType() {
-        return eventType;
+    public Integer getPartitionId() {
+        return partitionId;
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Topic {
     final private Integer topicId;
     private ArrayList<Partition> partitions;
+    final private String subject = "";
 
     public Topic(final Integer topicId, final Integer nbPartitionTopic, final Integer nbPartitions) {
         this.topicId = topicId;
