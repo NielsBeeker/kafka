@@ -6,12 +6,12 @@ import java.util.HashMap;
 public class ConsumerGroup {
     private ArrayList<Consumer> consumers;
     private HashMap<Integer, Integer> offsetPartition; // hash (partitionsid, offset)
-    final private String channel;
+    private String subject;
 
-    public ConsumerGroup(final String subject) {
-        this.channel = subject;
+    public ConsumerGroup() {
         this.consumers = new ArrayList<>();
         this.offsetPartition = new HashMap<>();
+        this.subject = null;
     }
 
     public boolean addConsumer(final Consumer consumer) {
@@ -31,6 +31,10 @@ public class ConsumerGroup {
             this.consumers.get(consumerIndex).addPartition(i);
         }
         return true;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
 }

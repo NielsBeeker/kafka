@@ -1,29 +1,48 @@
 package kafka.services;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
 import kafka.models.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EventBusService {
-    EventBus eventBus;
+    private EventBus eventBus;
+    private ArrayList<ConsumerGroup> consumerGroups;
+    final private Logger logger;
 
-    public boolean subscribe(String subject, ConsumerGroup consumerGroup) {
-
-        if (!this.eventBus.getTopics().get(subject) && consumerGroup.getSubject())
-            return false;
-        consumerGroup.setSubject(subject);
-        return true;
+    public EventBusService(EventBus eventBus, Logger logger) {
+        this.eventBus = eventBus;
+        this.consumerGroups = new ArrayList<>();
+        this.logger = logger;
     }
 
-    public void publish(Topic topic, Event event) {
-        try{
-           this.eventBus.getTopics().get(topic.subject)
-           .getPartition(event.getPartitionId().addEvent(event);
+    public boolean subscribe(final String subject, ConsumerGroup consumerGroup) {
+        if (!this.eventBus.getTopics().containsKey(subject)) {
+            logger.log(Level.WARNING, "This channel doesn't exist");
+            return false;
         }
-        catch (Error er) {
-            System.err.println(er);
+
+
+        this.consumerGroups.add(consumerGroup);
+        return true;
+
+    }
+
+    public boolean publish(final String subject, Event event) {
+        var topics = this.eventBus.getTopics();
+        if (!topics.containsKey(subject)) {
+            this.eventBus.createTopic(subject);
         }
+        for(Partition partition : topics.get(subject).getPartitions())
+        {
+            if(partition.getPartitionId() == event.getPartitionId()) {
+                partition.addEvent(event);
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Event> poll(Consumer consumer, Integer nbEvent, Integer timeout) {

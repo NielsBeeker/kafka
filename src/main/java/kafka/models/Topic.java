@@ -16,4 +16,8 @@ public class Topic {
         }
 
     }
+
+    public ArrayList<Partition> getPartitions() {
+        return partitions;
+    }
 }
