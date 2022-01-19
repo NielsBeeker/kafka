@@ -5,14 +5,12 @@ import java.util.ArrayList;
 public class Topic {
     final private Integer topicId;
     private ArrayList<Partition> partitions;
-    final private Integer nbPartitions;
 
-    public Topic(Integer topicId, Integer nbPartitions) {
+    public Topic(final Integer topicId, final Integer nbPartitionTopic, final Integer nbPartitions) {
         this.topicId = topicId;
-        this.nbPartitions = nbPartitions;
         partitions = new ArrayList<>();
-        for (int i = 0; i < nbPartitions; i++) {
-            partitions.add(new Partition(i));
+        for (int i = 0; i < nbPartitionTopic; i++) {
+            partitions.add(new Partition(nbPartitions + i));
         }
 
     }
