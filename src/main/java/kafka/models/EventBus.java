@@ -12,7 +12,7 @@ public class EventBus {
         this.topics = new HashMap<>();
     }
 
-    public boolean addTopic(final String subject) {
+    public boolean createTopic(final String subject) {
         var lowerSubject = subject.toLowerCase();
         var newTopic = new Topic(lowerSubject, nbPartitionTopic);
         return this.topics.put(lowerSubject, newTopic) != null;

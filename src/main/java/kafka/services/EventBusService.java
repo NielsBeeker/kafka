@@ -3,17 +3,31 @@ package kafka.services;
 import kafka.models.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EventBusService {
     EventBus eventBus;
+    private ArrayList<groupConsumer> groupConsumers;
 
-    public boolean subscribe(Topic topic, ConsumerGroup consumerGroup) {
-        if (consumerGroup.getTopicId())
+    public EventBusService(EventBus eventBus) {
+        this.eventBus = eventBus;
+        this.groupConsumers = new ArrayList<>();
+    }
+
+
+    //create topic
+    //subscribe
+    // poll
+    // publish
+
+
+    public boolean subscribe(Topic topic, groupConsumer groupConsumer) {
+        if (groupConsumer.getTopicId())
             return false;
-        consumerGroup.setTopicId(topic.topicId);
+        groupConsumer.setTopicId(topic.topicId);
         return true;
     }
+
+
 
     public void publish(Topic topic, Event event) {
         try{
