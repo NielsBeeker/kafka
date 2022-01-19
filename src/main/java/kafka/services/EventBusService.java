@@ -1,5 +1,7 @@
 package kafka.services;
 
-public class EventBusService {
+import kafka.models.EventBus;
 
+public class EventBusService {
+    private EventBus eventBus;
 }

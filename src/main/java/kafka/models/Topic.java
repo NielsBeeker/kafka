@@ -3,15 +3,16 @@ package kafka.models;
 import java.util.ArrayList;
 
 public class Topic {
-    final private Integer topicId;
     private ArrayList<Partition> partitions;
-    final private String subject = "";
+    private String subject;
+    private Integer nbPartitionMax;
 
-    public Topic(final Integer topicId, final Integer nbPartitionTopic, final Integer nbPartitions) {
-        this.topicId = topicId;
+    public Topic(final String subject, Integer nbPartitionMax) {
+        this.subject = subject;
+        this.nbPartitionMax = nbPartitionMax;
         partitions = new ArrayList<>();
-        for (int i = 0; i < nbPartitionTopic; i++) {
-            partitions.add(new Partition(nbPartitions + i));
+        for (int i = 0; i < this.nbPartitionMax; i++) {
+            partitions.add(new Partition(i));
         }
 
     }
