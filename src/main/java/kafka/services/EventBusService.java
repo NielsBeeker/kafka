@@ -8,10 +8,11 @@ import java.util.HashMap;
 public class EventBusService {
     EventBus eventBus;
 
-    public boolean subscribe(Topic topic, ConsumerGroup consumerGroup) {
-        if (consumerGroup.getTopicId())
+    public boolean subscribe(String subject, ConsumerGroup consumerGroup) {
+
+        if (!this.eventBus.getTopics().get(subject) && consumerGroup.getSubject())
             return false;
-        consumerGroup.setTopicId(topic.topicId);
+        consumerGroup.setSubject(subject);
         return true;
     }
 
@@ -25,7 +26,7 @@ public class EventBusService {
         }
     }
 
-    public ArrayList<Event> poll(String subject, Consumer consumer, Integer nbEvent, Integer timeout) {
+    public ArrayList<Event> poll(Consumer consumer, Integer nbEvent, Integer timeout) {
         Topic topic = this.eventBus.getTopics().get(subject);
         ArrayList<Event> events = new ArrayList<>();
         for(var partition : topic.getPartitions()){
