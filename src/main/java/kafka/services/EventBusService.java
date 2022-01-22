@@ -11,18 +11,13 @@ import java.util.ArrayList;
 public class EventBusService {
     private EventBus eventBus;
     private ArrayList<ConsumerGroup> consumerGroups;
+
     final private Logger logger;
 
     public EventBusService(EventBus eventBus, Logger logger) {
         this.eventBus = eventBus;
         this.consumerGroups = new ArrayList<>();
         this.logger = logger;
-    }
-
-
-    // Create topic with nb of partitions
-    public createTopic(Integer nbPartitions) {
-
     }
 
     // Needs to check if subject exists, then if consumer group exists
