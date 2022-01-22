@@ -1,5 +1,6 @@
 package kafka.services;
 
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -18,16 +19,26 @@ public class EventBusService {
         this.logger = logger;
     }
 
-    public boolean subscribe(final String subject, ConsumerGroup consumerGroup) {
+    // Needs to check if subject exists, then if consumer group exists
+    // Finally returns group id where the consumer has been added, then to be used in poll function
+    public Optional<Integer> subscribe(final String subject, final int consumerGroupId) {
         if (!this.eventBus.getTopics().containsKey(subject)) {
             logger.log(Level.WARNING, "This channel doesn't exist");
-            return false;
+            return Optional.empty();
         }
-
-
-        this.consumerGroups.add(consumerGroup);
-        return true;
-
+        // Check if consumer group exists, for the topic with the good subject, then add a consumer in the consumer group
+        for (var group : this.consumerGroups) {
+            if (group.getGroupId() == consumerGroupId) {
+                if (group.addConsumer(new Consumer())) {
+                    return Optional.of(group.getGroupId());
+                }
+                else {
+                    logger.log(Level.WARNING, "Cannot add consumer, group is full");
+                    return Optional.empty();
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean publish(final String subject, Event event) {
