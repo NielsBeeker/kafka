@@ -19,6 +19,12 @@ public class EventBusService {
         this.logger = logger;
     }
 
+
+    // Create topic with nb of partitions
+    public createTopic(Integer nbPartitions) {
+
+    }
+
     // Needs to check if subject exists, then if consumer group exists
     // Finally returns group id where the consumer has been added, then to be used in poll function
     public Optional<Integer> subscribe(final String subject, final int consumerGroupId) {
