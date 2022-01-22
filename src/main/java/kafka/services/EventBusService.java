@@ -1,5 +1,8 @@
 package kafka.services;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,5 +77,33 @@ public class EventBusService {
         return events;
     }
 
+    public ArrayList<Event> poll(final Integer userId, final String subject, final Integer groupId, final Integer nbEvents, final long timeout) {
+        // While time < timeout, get events from subject, with groupId
+        LocalTime currentTime = LocalTime.now();
+        var maxTime = currentTime.plusSeconds(timeout);
+        var results = new ArrayList<Event>();
+
+        for(var consumerGroup : consumerGroups) {
+            if(consumerGroup.getGroupId() == groupId) {
+                if (consumerGroup.getSubject() != subject) {
+                    logger.log(Level.WARNING, "Wrong subject given");
+                    return results;
+                }
+            }
+        }
+
+        var topic = this.eventBus.getTopic(subject);
+        if (topic == null) {
+            logger.log(Level.WARNING, "Wrong subject given");
+            return results;
+        }
+        // Check groupId existe, et est lié au topic
+        while (currentTime.isBefore(maxTime) || results.size() <= nbEvents) {
+            // Get data from userId in groupId
+
+            currentTime = LocalTime.now();
+        }
+        return results;
+    }
 
 }
