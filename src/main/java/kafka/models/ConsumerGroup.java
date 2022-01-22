@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConsumerGroup {
+    private Integer groupId;
     private ArrayList<Consumer> consumers;
     private HashMap<Integer, Integer> offsetPartition; // hash (partitionsid, offset)
     private String subject;
@@ -12,6 +13,14 @@ public class ConsumerGroup {
         this.consumers = new ArrayList<>();
         this.offsetPartition = new HashMap<>();
         this.subject = null;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
     public boolean addConsumer(final Consumer consumer) {
