@@ -21,6 +21,10 @@ public class EventBus {
     public HashMap<String, Topic> getTopics() {
         return topics;
     }
+
+    public Topic getTopic(String subject) {
+        return this.topics.get(subject);
+    }
 }
 // TOPIC
 // a la base, aucun topic, quandn ouveau msg, creation nouveau channel => topic
