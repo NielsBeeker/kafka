@@ -37,6 +37,10 @@ public class ConsumerGroup {
         this.subject = subject;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
 }
 
 
