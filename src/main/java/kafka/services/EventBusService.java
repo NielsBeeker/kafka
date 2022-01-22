@@ -60,37 +60,9 @@ public class EventBusService {
         return false;
     }
 
-    public ArrayList<Event> poll(Consumer consumer, Integer nbEvent, Integer timeout) {
-        Topic topic = this.eventBus.getTopics().get(subject);
-        ArrayList<Event> events = new ArrayList<>();
-        for(var partition : topic.getPartitions()){
-            if (consumer.partitionsId.contains(partition.partionId)) {
-                if (events.size() == nbEvent)
-                    break;
-                for (var event : partition) {
-                    if (events.size() == nbEvent)
-                        break;
-                    events.add(event);
-                }
-            }
-        }
-        return events;
-    }
-
     public ArrayList<Event> poll(final Integer userId, final String subject, final Integer groupId, final Integer nbEvents, final long timeout) {
         // While time < timeout, get events from subject, with groupId
-        LocalTime currentTime = LocalTime.now();
-        var maxTime = currentTime.plusSeconds(timeout);
         var results = new ArrayList<Event>();
-
-        for(var consumerGroup : consumerGroups) {
-            if(consumerGroup.getGroupId() == groupId) {
-                if (consumerGroup.getSubject() != subject) {
-                    logger.log(Level.WARNING, "Wrong subject given");
-                    return results;
-                }
-            }
-        }
 
         var topic = this.eventBus.getTopic(subject);
         if (topic == null) {
@@ -98,10 +70,48 @@ public class EventBusService {
             return results;
         }
         // Check groupId existe, et est lié au topic
-        while (currentTime.isBefore(maxTime) || results.size() <= nbEvents) {
-            // Get data from userId in groupId
 
-            currentTime = LocalTime.now();
+        ConsumerGroup group = null;
+
+        for(var consumerGroup : consumerGroups) {
+            if(consumerGroup.getGroupId() == groupId) {
+                group = consumerGroup;
+                if (consumerGroup.getSubject() != subject) {
+                    logger.log(Level.WARNING, "Wrong group given");
+                    return results;
+                }
+            }
+        }
+        if (group == null) {
+            logger.log(Level.WARNING, "Group ID not found");
+            return results;
+        }
+
+        var consumer = group.getConsumers().get(userId);
+
+        // Check user id and its partitions
+        if (consumer == null) {
+            logger.log(Level.WARNING, "Wrong User ID");
+            return results;
+        }
+        var partitions = consumer.getPartitionsId();
+
+        LocalTime currentTime = LocalTime.now();
+        var maxTime = currentTime.plusSeconds(timeout);
+
+        // Get data from userId in groupId
+        for (var partitionId : partitions) {
+            for (var event : topic.getPartitions().get(partitionId).getEvents()) {
+                currentTime = LocalTime.now();
+                results.add(event);
+                group.addOffset(partitionId);
+                if (results.size() >= nbEvents || currentTime.isBefore(maxTime)) {
+                    break;
+                }
+            }
+            if (results.size() >= nbEvents || currentTime.isBefore(maxTime)) {
+                break;
+            }
         }
         return results;
     }
