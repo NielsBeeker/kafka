@@ -15,6 +15,14 @@ public class ConsumerGroup {
         this.subject = null;
     }
 
+    public ArrayList<Consumer> getConsumers() {
+        return consumers;
+    }
+
+    public void setConsumers(ArrayList<Consumer> consumers) {
+        this.consumers = consumers;
+    }
+
     public Integer getGroupId() {
         return groupId;
     }
@@ -48,6 +56,11 @@ public class ConsumerGroup {
 
     public String getSubject() {
         return subject;
+    }
+
+    public void addOffset(Integer partitionId) {
+        var value = this.offsetPartition.get(partitionId);
+        this.offsetPartition.put(partitionId, value + 1);
     }
 
 }
